@@ -1,0 +1,8 @@
+{
+  "name": "Expense Management ERP",
+  "description": "An advanced restaurant Expense and Purchase Management ERP module featuring AI receipt scanning, itemized detail tables, multi-criteria filtering, and role-based privilege controls.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
