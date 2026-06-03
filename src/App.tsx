@@ -418,13 +418,7 @@ export default function App() {
             setCurrentRole((session.user.user_metadata?.role as UserRole) || "Owner");
           }
         } else {
-          // Check if sandbox simulated user is saved
-          const savedSandboxUser = localStorage.getItem("erp_sandbox_user");
-          const savedSandboxRole = localStorage.getItem("erp_sandbox_role");
-          if (savedSandboxUser) {
-            setCurrentUser(JSON.parse(savedSandboxUser));
-            setCurrentRole((savedSandboxRole as UserRole) || "Owner");
-          }
+          setCurrentUser(null);
         }
         setAuthChecking(false);
       });
@@ -439,11 +433,8 @@ export default function App() {
             localStorage.setItem("erp_sandbox_role", metaRole);
           }
         } else {
-          // If signed out, clean up
-          const savedSandboxUser = localStorage.getItem("erp_sandbox_user");
-          if (!savedSandboxUser) {
-            setCurrentUser(null);
-          }
+          // If signed out, clear session state
+          setCurrentUser(null);
         }
         setAuthChecking(false);
       });
@@ -452,13 +443,7 @@ export default function App() {
         subscription.unsubscribe();
       };
     } else {
-      // Offline/sandbox mode: load cached sandbox user if exists
-      const savedSandboxUser = localStorage.getItem("erp_sandbox_user");
-      const savedSandboxRole = localStorage.getItem("erp_sandbox_role");
-      if (savedSandboxUser) {
-        setCurrentUser(JSON.parse(savedSandboxUser));
-        setCurrentRole((savedSandboxRole as UserRole) || "Owner");
-      }
+      // Supabase is not configured: stay at auth screen and do not restore sandbox sessions
       setAuthChecking(false);
     }
   }, []);

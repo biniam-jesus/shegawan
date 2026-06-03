@@ -64,7 +64,6 @@ export function AuthScreen({ language, onLanguageToggle, onAuthSuccess }: AuthSc
                 ? "የአካውንት ምዝገባ ተሳክቷል! በመለያው ለመግባት ኢሜይልዎን ያረጋግጡ ወይም ወዲያውኑ ይግቡ።"
                 : "Account created successfully! Check your email for verification link or try signing in."
             );
-            // Autofill and switch to login for better experience
             setIsSignUp(false);
           }
         } else {
@@ -77,7 +76,6 @@ export function AuthScreen({ language, onLanguageToggle, onAuthSuccess }: AuthSc
           if (error) throw error;
 
           if (data?.user) {
-            // Retrieve role from user metadata or fallback
             const userRole: UserRole = data.user.user_metadata?.role || role;
             setSuccessMsg(t.authSuccessTitle);
             setTimeout(() => {
@@ -86,23 +84,11 @@ export function AuthScreen({ language, onLanguageToggle, onAuthSuccess }: AuthSc
           }
         }
       } else {
-        // Mock offline sandbox auth simulation
-        setTimeout(() => {
-          const mockUser = {
-            id: "mock_usr_" + Date.now().toString().slice(-6),
-            email: email,
-            user_metadata: { role },
-          };
-          
-          // Save mock session to localStorage helper
-          localStorage.setItem("erp_sandbox_user", JSON.stringify(mockUser));
-          localStorage.setItem("erp_sandbox_role", role);
-          
-          setSuccessMsg(t.authSuccessTitle + " (" + (language === "am" ? "ባለቤትነት የተረጋገጠ" : "Authorized Offline") + ")");
-          setTimeout(() => {
-            onAuthSuccess(mockUser, role);
-          }, 800);
-        }, 600);
+        setErrorMsg(
+          language === "am"
+            ? "እባክዎን የSupabase አቅርቦት ያስቀምጡ። ግባት የSupabase እንጂ እንግዳ አይደለም."
+            : "Please configure Supabase first. Login is only available through Supabase."
+        );
       }
     } catch (err: any) {
       console.error("Auth process error:", err);
@@ -112,17 +98,6 @@ export function AuthScreen({ language, onLanguageToggle, onAuthSuccess }: AuthSc
     }
   };
 
-  const handleContinueAsGuest = () => {
-    // Immediate bypass into full editable sandbox module using defaults or saved state
-    const guestUser = {
-      id: "sandbox_guest_" + Math.random().toString(36).substring(4, 9),
-      email: "sandbox@epicurean.erp",
-      user_metadata: { role: "Owner" }
-    };
-    localStorage.setItem("erp_sandbox_user", JSON.stringify(guestUser));
-    localStorage.setItem("erp_sandbox_role", "Owner");
-    onAuthSuccess(guestUser, "Owner");
-  };
 
   return (
     <div className="min-h-screen bg-dark-bg flex items-center justify-center p-4 relative overflow-hidden font-sans select-none">
@@ -175,8 +150,8 @@ export function AuthScreen({ language, onLanguageToggle, onAuthSuccess }: AuthSc
             </div>
             <p className="text-neutral-400 leading-relaxed font-light">
               {language === "am"
-                ? "ሱፓቤዝ (Supabase) አልተዋቀረም። ነገር ግን አፕሊኬሽኑ በሙሉ አቅሙ በአካባቢ ማከማቻ (Sandbox Local Mode) መሥራት እንዲችል ተደርጎ ተዘጋጅቷል!"
-                : "Supabase parameters not declared in env yet. You can sign in locally with mock credentials to experience 100% of ERP ledger features instantly."}
+                ? "እባክዎን የSupabase እቅድ ያስቀምጡ እና ከዚያ በኋላ ይግቡ። ግባት ከSupabase ብቻ ይሁን።"
+                : "Please configure Supabase first and then sign in. Authentication is available only through Supabase."}
             </p>
           </div>
         )}
@@ -276,7 +251,7 @@ export function AuthScreen({ language, onLanguageToggle, onAuthSuccess }: AuthSc
           <button
             id="auth-submit-btn"
             type="submit"
-            disabled={loading}
+            disabled={!isConfigured || loading}
             className="w-full py-3 bg-gold-accent hover:bg-gold-accent/90 text-dark-bg font-bold rounded-xl text-sm shadow-lg shadow-gold-accent/15 cursor-pointer flex items-center justify-center gap-2 tracking-wide uppercase transition-all"
           >
             {loading ? (
@@ -306,19 +281,6 @@ export function AuthScreen({ language, onLanguageToggle, onAuthSuccess }: AuthSc
           </button>
         </div>
 
-        {/* Offline Sandbox Skip action */}
-        {!isConfigured && (
-          <div className="text-center mt-5">
-            <button
-              id="auth-guest-bypass-btn"
-              type="button"
-              onClick={handleContinueAsGuest}
-              className="text-[11px] font-mono text-neutral-500 hover:text-gold-accent underline transition-colors cursor-pointer"
-            >
-              🚀 {t.continueOfflineButton}
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );
