@@ -2,7 +2,8 @@ import { createClient } from "@supabase/supabase-js";
 import { Expense, Supplier, PurchaseOrder, RecurringExpense } from "../types";
 
 const supabaseUrl = (import.meta as any).env.VITE_SUPABASE_URL;
-const supabaseAnonKey = (import.meta as any).env.VITE_SUPABASE_ANON_KEY;
+const supabaseAnonKey = (import.meta as any).env.VITE_SUPABASE_ANON_KEY || (import.meta as any).env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const supabaseKeyName = (import.meta as any).env.VITE_SUPABASE_ANON_KEY ? "VITE_SUPABASE_ANON_KEY" : "VITE_SUPABASE_PUBLISHABLE_KEY";
 
 // Check if client-side environmental configurations are present and valid
 export const isSupabaseConfigured = (): boolean => {
@@ -14,7 +15,8 @@ export const isSupabaseConfigured = (): boolean => {
     return !!(isUrlValid && 
             isKeyValid && 
             supabaseUrl !== "YOUR_SUPABASE_URL" && 
-            supabaseAnonKey !== "YOUR_SUPABASE_ANON_KEY");
+            supabaseAnonKey !== "YOUR_SUPABASE_ANON_KEY" &&
+            supabaseAnonKey !== "YOUR_SUPABASE_PUBLISHABLE_KEY");
   } catch (e) {
     return false;
   }
@@ -24,6 +26,11 @@ export const isSupabaseConfigured = (): boolean => {
 export const supabase = (() => {
   if (isSupabaseConfigured()) {
     try {
+      console.info("Supabase client initialized with env:", {
+        url: supabaseUrl ? "SET" : "MISSING",
+        key: supabaseAnonKey ? "SET" : "MISSING",
+        keyName: supabaseKeyName,
+      });
       return createClient(supabaseUrl, supabaseAnonKey);
     } catch (err) {
       console.error("Critical: Failed to initialize Supabase client safely:", err);

@@ -330,12 +330,15 @@ CREATE POLICY "Allow public delete inventory_stock" ON inventory_stock FOR DELET
 
                   <div className="p-3 bg-[#161618] rounded-xl border border-[#232325] flex items-center justify-between leading-normal">
                     <div className="space-y-0.5">
-                      <span className="text-neutral-500 font-sans block text-[9.5px] font-bold uppercase">Anon Key (VITE_SUPABASE_ANON_KEY)</span>
+                      <span className="text-neutral-500 font-sans block text-[9.5px] font-bold uppercase">Anon / Publishable Key</span>
                       <span className="text-neutral-350 select-all truncate block max-w-[170px]">
-                        {(import.meta as any).env.VITE_SUPABASE_ANON_KEY ? "••••••••••••••••••••" : "NOT SET"}
+                        {(import.meta as any).env.VITE_SUPABASE_ANON_KEY || (import.meta as any).env.VITE_SUPABASE_PUBLISHABLE_KEY ? "••••••••••••••••••••" : "NOT SET"}
+                      </span>
+                      <span className="text-neutral-500 text-[9px] block">
+                        {import.meta.env.VITE_SUPABASE_ANON_KEY ? "VITE_SUPABASE_ANON_KEY" : import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ? "VITE_SUPABASE_PUBLISHABLE_KEY" : "No key set"}
                       </span>
                     </div>
-                    {(import.meta as any).env.VITE_SUPABASE_ANON_KEY ? (
+                    {(import.meta as any).env.VITE_SUPABASE_ANON_KEY || (import.meta as any).env.VITE_SUPABASE_PUBLISHABLE_KEY ? (
                       <CheckCircle2 className="h-4.5 w-4.5 text-green-500 flex-shrink-0" />
                     ) : (
                       <XCircle className="h-4.5 w-4.5 text-neutral-600 flex-shrink-0" />
