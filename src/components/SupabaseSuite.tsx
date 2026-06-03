@@ -480,12 +480,12 @@ CREATE TABLE IF NOT EXISTS purchase_orders (
                   },
                   {
                     title: "Backend Proxy Server compatibility",
-                    desc: "The Gemini AI OCR Receipt scanner relies on node-compatible server processes. Vercel compiles these files into isolated Edge / Lambda serverless runtimes automatically.",
+                    desc: "The receipt parser backend relies on node-compatible server processes. Vercel runs these as serverless functions automatically.",
                     file: "server.ts"
                   },
                   {
                     title: "Environment Variables Alignment",
-                    desc: "When deploying to Vercel, attach GEMINI_API_KEY, VITE_SUPABASE_URL, and VITE_SUPABASE_ANON_KEY inside the Vercel Dashboard under Settings > Environment Variables.",
+                    desc: "When deploying to Vercel, attach VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY inside the Vercel Dashboard under Settings > Environment Variables.",
                     file: "Dashboard Configuration"
                   }
                 ].map((step, idx) => (

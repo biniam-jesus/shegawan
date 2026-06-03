@@ -156,7 +156,7 @@ export const RoleToggle: React.FC<RoleToggleProps> = ({
                   ? "bg-gold-accent text-dark-bg font-bold shadow-md shadow-gold-accent/15"
                   : "text-neutral-400 hover:text-white hover:bg-border-light"
               }`}
-              title="Kitchen Staff: Request purchases, log receipts, parse receipts with Gemini."
+              title="Kitchen Staff: Request purchases, log receipts, and parse receipts."
             >
               <User className="h-3 w-3" />
               {language === "am" ? "ሠራተኛ" : "Staff"}

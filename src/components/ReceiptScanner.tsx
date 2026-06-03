@@ -63,11 +63,7 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({ onScanComplete, 
       const resData = await response.json();
       if (resData.success && resData.data) {
         setScannedResult(resData.data);
-        if (resData.isFallback) {
-          setNoticeMessage(resData.notice || "Using local OCR backup parser. Setup GEMINI_API_KEY for visual parsing.");
-        } else {
-          setNoticeMessage("Gemini API successfully performed visual OCR and Categorization!");
-        }
+        setNoticeMessage(resData.notice || "Receipt parsed successfully.");
         onScanComplete(resData.data);
       } else {
         throw new Error(resData.error || "Failed to parse receipt data layout.");
@@ -134,7 +130,7 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({ onScanComplete, 
           </h3>
         </div>
         <span className="bg-[#c5a059]/15 text-[#c5a059] text-[10px] font-mono font-bold px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1 border border-[#c5a059]/20">
-          <Sparkles className="h-3 w-3 inline animate-pulse" /> Gemini AI
+          <Sparkles className="h-3 w-3 inline animate-pulse" /> Smart Parser
         </span>
       </div>
 
@@ -203,7 +199,7 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({ onScanComplete, 
 
           <p className="text-[10px] text-neutral-500 mt-2 flex items-center gap-1 italic">
             <Sparkles className="h-3 w-3 text-[#c5a059] flex-shrink-0" />
-            Runs Gemini visual analysis to auto-extract items.
+            Parses receipt layout to auto-extract items.
           </p>
         </div>
       </div>
@@ -213,7 +209,7 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({ onScanComplete, 
         <div className="mt-4 bg-[#1a1a1c] border border-[#c5a059]/30 rounded-lg p-3 flex gap-2.5 items-start text-neutral-300 animate-pulse">
           <RefreshCw className="h-5 w-5 text-[#c5a059] animate-spin mt-0.5 flex-shrink-0" />
           <div>
-            <p className="text-xs font-semibold">Gemini AI is analyzing receipt layout...</p>
+            <p className="text-xs font-semibold">Receipt parser is analyzing receipt layout...</p>
             <p className="text-[10px] text-neutral-500 mt-0.5">Reading supplier headers, dates, tax records, units, and compiling product lists...</p>
           </div>
         </div>
